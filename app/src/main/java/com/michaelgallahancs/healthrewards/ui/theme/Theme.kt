@@ -1,4 +1,4 @@
-package com.michaelgallahancs.dietrewards.ui.theme
+package com.michaelgallahancs.healthrewards.ui.theme
 
 import android.app.Activity
 import android.os.Build

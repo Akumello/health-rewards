@@ -1,4 +1,4 @@
-package com.michaelgallahancs.dietrewards
+package com.michaelgallahancs.healthrewards
 
 import android.content.Context
 import android.os.Bundle
@@ -16,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.datastore.preferences.preferencesDataStore
-import com.michaelgallahancs.dietrewards.ui.theme.DietRewardsTheme
-import com.michaelgallahancs.dietrewards.utilities.Countdown
+import com.michaelgallahancs.healthrewards.ui.theme.DietRewardsTheme
+import com.michaelgallahancs.healthrewards.utilities.Countdown
 
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore(name = "user data")

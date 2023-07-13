@@ -1,6 +1,4 @@
-package com.michaelgallahancs.dietrewards.utilities
-
-import android.util.Log
+package com.michaelgallahancs.healthrewards.utilities
 
 class Countdown(timerString : String) {
     private var timerStr : String = timerString

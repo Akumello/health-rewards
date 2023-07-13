@@ -1,4 +1,4 @@
-package com.michaelgallahancs.dietrewards
+package com.michaelgallahancs.healthrewards
 
 import org.junit.Test
 

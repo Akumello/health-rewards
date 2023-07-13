@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.michaelgallahancs.dietrewards'
+    namespace 'com.michaelgallahancs.healthrewards'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.michaelgallahancs.dietrewards"
+        applicationId "com.michaelgallahancs.healthrewards"
         minSdk 26
         targetSdk 33
         versionCode 1

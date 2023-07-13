@@ -1,4 +1,4 @@
-package com.michaelgallahancs.dietrewards.ui.theme
+package com.michaelgallahancs.healthrewards.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
