@@ -11,8 +11,13 @@
     <TextView
         android:id="@+id/tvCountdown"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="48:00:00" />
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:layout_weight="1"
+        android:text="48:00:00"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,10 +25,11 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tvTokenCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="0"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +39,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Space
@@ -47,7 +53,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="subtractMiles"
-            android:text="-" />
+            android:text="-"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvMilesCounter"
@@ -55,20 +64,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="1"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnAddMiles"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="61dp"
             android:layout_weight="1"
             android:onClick="addMiles"
-            android:text="+" />
+            android:text="+"
+            android:textSize="20sp" />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="4" />
+
     </LinearLayout>
 
 </LinearLayout>

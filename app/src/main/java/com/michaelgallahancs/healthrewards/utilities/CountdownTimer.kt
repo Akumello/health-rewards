@@ -11,12 +11,13 @@ import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 
-class CountdownTimer(initialTimeStr : String) {
-    private var hours : Int = initialTimeStr.split(":")[0].toInt()
-    private var minutes : Int = initialTimeStr.split(":")[1].toInt()
-    private var seconds : Int = initialTimeStr.split(":")[2].toInt()
+class CountdownTimer(startingTime : String) {
+    private var hours : Int = startingTime.split(":")[0].toInt()
+    private var minutes : Int = startingTime.split(":")[1].toInt()
+    private var seconds : Int = startingTime.split(":")[2].toInt()
     private lateinit var timerTextView : TextView
-    val template : String = "%02d:%02d:%02d"
+    private val template : String = "%02d:%02d:%02d"
+    private lateinit var callback : (secondsLeft : Int) -> Unit
 
     private val calendar : Calendar = Calendar.getInstance()
     private var createdDateTime : LocalDateTime = LocalDateTime.of(
@@ -27,6 +28,20 @@ class CountdownTimer(initialTimeStr : String) {
         calendar.get(Calendar.MINUTE),
         calendar.get(Calendar.SECOND)
     )
+
+    constructor(startingTime: String, createdDateTime: LocalDateTime) : this(startingTime) {
+        Log.d("healthapp", "Setting to $createdDateTime. \nCurrent time is ${this.createdDateTime}")
+        this.createdDateTime = createdDateTime
+
+        Log.d("healthapp", "Time passed is ${timePassedInSeconds()}\nSeconds remaining is ${secondsRemaining()}")
+        var newSecondsRemaining = secondsRemaining() - timePassedInSeconds()
+        hours = newSecondsRemaining / 60 / 60
+        newSecondsRemaining -= hours * 60 * 60
+        minutes = newSecondsRemaining / 60
+        newSecondsRemaining -= minutes * 60
+        seconds = newSecondsRemaining
+        Log.d("healthapp", "After update, seconds remaining is ${secondsRemaining()}")
+    }
 
     val handler: Handler = Handler(Looper.getMainLooper())
     private val countDownOneSec : Runnable = object : Runnable {
@@ -45,7 +60,7 @@ class CountdownTimer(initialTimeStr : String) {
             if ((hours + minutes + seconds) == 0)
                 handler.removeCallbacks(this)
 
-            timerTextView.text = template.format(hours,minutes,seconds)
+            timerTextView.text = timeRemainingToString()
         }
     }
 
@@ -81,15 +96,15 @@ class CountdownTimer(initialTimeStr : String) {
         handler.removeCallbacks(countDownOneSec)
     }
 
-    private fun timePassedInSeconds() : String {
-        return ChronoUnit.SECONDS.between(createdDateTime, LocalDateTime.now()).toString()
+    private fun timePassedInSeconds() : Int {
+        return ChronoUnit.SECONDS.between(createdDateTime, LocalDateTime.now()).toInt()
     }
 
     public fun timeRemainingToString() : String {
         return template.format(hours, minutes, seconds)
     }
 
-    fun secondsRemaining(): Int {
+    private fun secondsRemaining(): Int {
         return (hours * 60 * 60) + (minutes * 60) + seconds
     }
 }

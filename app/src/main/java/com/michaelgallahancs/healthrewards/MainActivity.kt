@@ -25,7 +25,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
-import com.michaelgallahancs.healthrewards.ui.theme.DietRewardsTheme
+import com.michaelgallahancs.healthrewards.ui.theme.HealthRewardsTheme
 import com.michaelgallahancs.healthrewards.utilities.CountdownTimer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -38,17 +38,18 @@ import kotlin.math.log
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore("settings")
 
+    private val TIMER_START : String = "48:00:00"
+
     private lateinit var btnSubMiles : Button
     private lateinit var addButton: Button
     private lateinit var milesCounterText: TextView
     private lateinit var tvCountdown : TextView
+    private lateinit var tvTokenCount : TextView
 
     // Initialize with time from storage
-    private val timer : CountdownTimer = CountdownTimer("00:00:30")
+    private lateinit var timer : CountdownTimer
 
     private object Keys {
-        // save on stop/pause
-        // pull on create
         val TIMER_CREATED = stringPreferencesKey("timer_created")
         val TOKEN_COUNT = stringPreferencesKey("token_count")
         val MILE_COUNT = stringPreferencesKey("mile_count")
@@ -63,13 +64,21 @@ class MainActivity : ComponentActivity() {
         addButton = findViewById<Button>(R.id.btnAddMiles)
         milesCounterText = findViewById<TextView>(R.id.tvMilesCounter)
         tvCountdown = findViewById<TextView>(R.id.tvCountdown)
-        timer.start(tvCountdown)
+        tvTokenCount = findViewById<TextView>(R.id.tvTokenCount)
 
         // ##### Restore data from datastore #####
         lifecycleScope.launch() {
-            milesCounterText.text = getMilesFromDataStore()
+            val miles = getMilesFromDataStore()
+            milesCounterText.text = if (miles != "") miles else "0"
             val tokens = getTokensFromDataStore()
             val timerCreateTime = getTimerDateFromDataStore()
+            timer = if(timerCreateTime != "")
+                CountdownTimer(TIMER_START, LocalDateTime.parse(timerCreateTime))
+            else
+                CountdownTimer(TIMER_START)
+
+            Log.d("healthapp", "timer created: $timerCreateTime")
+            timer.start(tvCountdown)
         }
     }
 
@@ -107,18 +116,29 @@ class MainActivity : ComponentActivity() {
         dataStore.edit { settings ->
             settings[Keys.MILE_COUNT] = milesCounterText.text.toString()
             settings[Keys.TIMER_CREATED] = timer.getCreatedDateTime().toString()
-            settings[Keys.TOKEN_COUNT] = "0"
-            Log.d("healthapp", settings[Keys.MILE_COUNT]?:"Mile count not set")
+            settings[Keys.TOKEN_COUNT] = tvTokenCount.text.toString()
         }
-
-        Log.d("healthapp", getMilesFromDataStore())
     }
 
     fun subtractMiles(view: View) {
-        milesCounterText.text = ("${(milesCounterText.text.toString().toInt() - 1)}")
+        var result = milesCounterText.text.toString().toInt() - 1
+        if (result >= 0)
+            milesCounterText.text = ("${(milesCounterText.text.toString().toInt() - 1)}")
     }
 
     fun addMiles(view: View) {
-        milesCounterText.text = ("${(milesCounterText.text.toString().toInt() + 1)}")
+        var result = milesCounterText.text.toString().toInt() + 1
+        var tokenEarned = false
+        if (result == 10) {
+            tokenEarned = true
+            result = 0
+            timer.stop()
+            timer = CountdownTimer(TIMER_START)
+            timer.start(tvCountdown)
+        }
+
+        milesCounterText.text = "$result"
+        if (tokenEarned)
+            tvTokenCount.text = "${tvTokenCount.text.toString().toInt() + 1}"
     }
 }
