@@ -6,6 +6,8 @@ import android.os.Debug
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.datastore.core.DataStore
@@ -45,9 +48,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var milesCounterText: TextView
     private lateinit var tvCountdown : TextView
     private lateinit var tvTokenCount : TextView
+    private lateinit var linLayoutBackground : LinearLayout
+    private lateinit var cbFood : CheckBox
+    private lateinit var cbDrink : CheckBox
+    private lateinit var tvCost : TextView
 
     // Initialize with time from storage
     private lateinit var timer : CountdownTimer
+    private var cost : Int = 0
 
     private object Keys {
         val TIMER_CREATED = stringPreferencesKey("timer_created")
@@ -65,19 +73,25 @@ class MainActivity : ComponentActivity() {
         milesCounterText = findViewById<TextView>(R.id.tvMilesCounter)
         tvCountdown = findViewById<TextView>(R.id.tvCountdown)
         tvTokenCount = findViewById<TextView>(R.id.tvTokenCount)
+        linLayoutBackground = findViewById<LinearLayout>(R.id.linLayoutBackground)
+        cbFood = findViewById<CheckBox>(R.id.cbFood)
+        cbDrink = findViewById<CheckBox>(R.id.cbDrink)
+        tvCost = findViewById<TextView>(R.id.tvCost)
 
         // ##### Restore data from datastore #####
         lifecycleScope.launch() {
             val miles = getMilesFromDataStore()
             milesCounterText.text = if (miles != "") miles else "0"
+
             val tokens = getTokensFromDataStore()
+            tvTokenCount.text = if (tokens != "") tokens else "0"
+
             val timerCreateTime = getTimerDateFromDataStore()
             timer = if(timerCreateTime != "")
                 CountdownTimer(TIMER_START, LocalDateTime.parse(timerCreateTime))
             else
                 CountdownTimer(TIMER_START)
 
-            Log.d("healthapp", "timer created: $timerCreateTime")
             timer.start(tvCountdown)
         }
     }
@@ -87,12 +101,17 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch() {
             saveAll()
         }
+        timerCheckPoint("")
     }
 
-    override fun onStart() {
-        super.onStart()
-
+    val timerCheckPoint : (String) -> Unit = {
+        // #6B4CAF50
+        //
+        //Color(107, 175, 76, 42)
+        linLayoutBackground.setBackgroundColor(Color(107, 175, 76, 42).value.toInt())
     }
+
+
 
     private suspend fun getMilesFromDataStore() : String {
         return dataStore.data.map { settings ->
@@ -118,6 +137,28 @@ class MainActivity : ComponentActivity() {
             settings[Keys.TIMER_CREATED] = timer.getCreatedDateTime().toString()
             settings[Keys.TOKEN_COUNT] = tvTokenCount.text.toString()
         }
+    }
+
+    fun drinkChecked(view: View) {
+        cbFood.isChecked = true
+        cost =  if (cbFood.isChecked && cbDrink.isChecked) 2
+                else if (cbFood.isChecked || cbDrink.isChecked) 1
+                else 0
+        tvCost.text = cost.toString()
+    }
+
+    fun foodChecked(view: View) {
+        cost =  if (cbFood.isChecked && cbDrink.isChecked) 2
+                else if (cbFood.isChecked || cbDrink.isChecked) 1
+                else 0
+        tvCost.text = cost.toString()
+    }
+
+    fun spendButtonClicked(view: View) {
+        val tokenCount = tvTokenCount.text.toString().toInt()
+        Log.d("healthapp", "$tokenCount")
+        if (tokenCount >= cost)
+            tvTokenCount.text = (tokenCount - cost).toString()
     }
 
     fun subtractMiles(view: View) {

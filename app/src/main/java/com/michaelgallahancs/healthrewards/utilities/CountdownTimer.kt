@@ -17,7 +17,7 @@ class CountdownTimer(startingTime : String) {
     private var seconds : Int = startingTime.split(":")[2].toInt()
     private lateinit var timerTextView : TextView
     private val template : String = "%02d:%02d:%02d"
-    private lateinit var callback : (secondsLeft : Int) -> Unit
+    private lateinit var checkpointCallback : (secondsLeft : Int) -> Unit
 
     private val calendar : Calendar = Calendar.getInstance()
     private var createdDateTime : LocalDateTime = LocalDateTime.of(
@@ -30,17 +30,14 @@ class CountdownTimer(startingTime : String) {
     )
 
     constructor(startingTime: String, createdDateTime: LocalDateTime) : this(startingTime) {
-        Log.d("healthapp", "Setting to $createdDateTime. \nCurrent time is ${this.createdDateTime}")
         this.createdDateTime = createdDateTime
 
-        Log.d("healthapp", "Time passed is ${timePassedInSeconds()}\nSeconds remaining is ${secondsRemaining()}")
         var newSecondsRemaining = secondsRemaining() - timePassedInSeconds()
         hours = newSecondsRemaining / 60 / 60
         newSecondsRemaining -= hours * 60 * 60
         minutes = newSecondsRemaining / 60
         newSecondsRemaining -= minutes * 60
         seconds = newSecondsRemaining
-        Log.d("healthapp", "After update, seconds remaining is ${secondsRemaining()}")
     }
 
     val handler: Handler = Handler(Looper.getMainLooper())
