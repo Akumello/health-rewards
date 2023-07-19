@@ -5,15 +5,16 @@
     android:id="@+id/linLayoutBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#6B4CAF50"
-    android:orientation="vertical">
+    android:background="#6BD8E7EA"
+    android:orientation="vertical"
+    android:weightSum="7">
 
     <TextView
         android:id="@+id/tvCountdown"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:text="48:00:00"
         android:textAlignment="center"
         android:textSize="34sp"
@@ -21,18 +22,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="0dp"
+        android:layout_weight="4">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="28dp"
             android:text="Tokens:"
-            android:textSize="24sp"
+            android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.076"
+            app:layout_constraintHorizontal_bias="0.108"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,11 +41,11 @@
             android:id="@+id/tvTokenCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="28dp"
             android:text="0"
-            android:textSize="24sp"
+            android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.068"
+            app:layout_constraintHorizontal_bias="0.045"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,53 +65,85 @@
         <CheckBox
             android:id="@+id/cbDrink"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="132dp"
             android:onClick="drinkChecked"
-            android:text="Drink"
+            android:text="Drinks"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cbFood" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbFood"
+            app:layout_constraintVertical_bias="0.739" />
+
+        <CheckBox
+            android:id="@+id/cdSweets"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:onClick="drinkChecked"
+            android:text="Sweets"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.071"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cbDrink"
+            app:layout_constraintVertical_bias="0.188" />
 
         <CheckBox
             android:id="@+id/cbFood"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="40dp"
+            android:layout_height="52dp"
+            android:layout_marginBottom="208dp"
             android:onClick="foodChecked"
             android:text="Food"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.115"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/tvCost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="68dp"
             android:layout_marginBottom="16dp"
             android:text="0"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/btnSpend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="296dp"
+            android:layout_marginEnd="88dp"
+            android:text="Cost:"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4" />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnSubMiles"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="subtractMiles"
@@ -121,7 +154,7 @@
 
         <TextView
             android:id="@+id/tvMilesCounter"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="1"
@@ -130,17 +163,17 @@
 
         <Button
             android:id="@+id/btnAddMiles"
-            android:layout_width="wrap_content"
-            android:layout_height="61dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="addMiles"
             android:text="+"
             android:textSize="20sp" />
 
         <Space
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 

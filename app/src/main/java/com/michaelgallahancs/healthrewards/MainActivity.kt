@@ -2,7 +2,6 @@ package com.michaelgallahancs.healthrewards
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Debug
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -10,38 +9,22 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
-import com.michaelgallahancs.healthrewards.ui.theme.HealthRewardsTheme
 import com.michaelgallahancs.healthrewards.utilities.CountdownTimer
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import java.time.LocalDateTime
-import kotlin.math.log
 
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore("settings")
 
     private val TIMER_START : String = "48:00:00"
+    private val timerCheckPoints : Array<String> = arrayOf("36:00:00", "24:00:00")
 
     private lateinit var btnSubMiles : Button
     private lateinit var addButton: Button
@@ -92,7 +75,9 @@ class MainActivity : ComponentActivity() {
             else
                 CountdownTimer(TIMER_START)
 
+            timer.setCheckpoints(timerCheckPointCallback, *timerCheckPoints)
             timer.start(tvCountdown)
+            tvCountdown.setBackgroundColor(0x6B4CAF42)
         }
     }
 
@@ -101,14 +86,21 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch() {
             saveAll()
         }
-        timerCheckPoint("")
     }
 
-    val timerCheckPoint : (String) -> Unit = {
-        // #6B4CAF50
-        //
-        //Color(107, 175, 76, 42)
-        linLayoutBackground.setBackgroundColor(Color(107, 175, 76, 42).value.toInt())
+    private val timerCheckPointCallback : (String) -> Unit = {
+        // Alpha: 30
+        // Green:  #6B4CAF42 76 175 80
+        // Yellow: #4DFFEB3B 255 235 59
+        // Red-Or: #4DF44336 244 67 54
+        Log.d("healthapp", "callback has been executed: $it")
+        timerCheckPoints.forEachIndexed { i, checkpoint ->
+            if (it == checkpoint && i == 0) // First checkpoint
+                tvCountdown.setBackgroundColor(0x4DFFEB3B)
+                //tvCountdown.setBackgroundColor(Color(255,235,59,30).value.toInt())
+            if (it == checkpoint && i == 1) // Second checkpoint
+                tvCountdown.setBackgroundColor(0x4DF44336)
+        }
     }
 
 
@@ -173,9 +165,8 @@ class MainActivity : ComponentActivity() {
         if (result == 10) {
             tokenEarned = true
             result = 0
-            timer.stop()
-            timer = CountdownTimer(TIMER_START)
-            timer.start(tvCountdown)
+            timer.restart()
+            tvCountdown.setBackgroundColor(0x6B4CAF42)
         }
 
         milesCounterText.text = "$result"
