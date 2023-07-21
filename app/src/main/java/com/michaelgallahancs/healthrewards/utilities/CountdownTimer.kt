@@ -82,8 +82,9 @@ class CountdownTimer(private val startingTime : String) {
             this.checkpoints!![i].minutes = checkpoint.split(":")[1].toInt()
             this.checkpoints!![i].seconds = checkpoint.split(":")[2].toInt()
 
-            if(secondsRemaining() < toSeconds(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds))
-                checkpointCallback?.let{ it( template.format(this.checkpoints!![i])) }
+            Log.d("healthapp", "${template.format(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds)}")
+            if(secondsRemaining() <= toSeconds(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds))
+                checkpointCallback?.let{ it( template.format(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds)) }
         }
     }
 
