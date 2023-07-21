@@ -7,8 +7,9 @@ import android.widget.TextView
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
+import kotlin.math.abs
 
-class CountdownTimer(private val startingTime : String) {
+class CountdownTimer(private val startingTime : String, private var checkpointCallback : ((checkpoint : String) -> Unit)? = null) {
     private var hours : Int = startingTime.split(":")[0].toInt()
     private var minutes : Int = startingTime.split(":")[1].toInt()
     private var seconds : Int = startingTime.split(":")[2].toInt()
@@ -17,7 +18,6 @@ class CountdownTimer(private val startingTime : String) {
 
     data class Checkpoint (var hours : Int, var minutes : Int, var seconds : Int)
     private var checkpoints : Array<Checkpoint>? = null
-    private var checkpointCallback : ((checkpoint : String) -> Unit)? = null
 
     private val calendar : Calendar = Calendar.getInstance()
     private var createdDateTime : LocalDateTime = LocalDateTime.of(
@@ -31,10 +31,21 @@ class CountdownTimer(private val startingTime : String) {
 
     val handler: Handler = Handler(Looper.getMainLooper())
 
-    constructor(startingTime: String, createdDateTime: LocalDateTime) : this(startingTime) {
+    constructor(startingTime: String, createdDateTime: LocalDateTime, checkpointCallback: ((checkpoint : String) -> Unit)? = null) : this(startingTime, checkpointCallback) {
         this.createdDateTime = createdDateTime
 
+
         var actualSecRemaining = secondsRemaining() - timePassedInSeconds()
+        Log.d("healthapp", "actual: $actualSecRemaining | secondsRemaining: ${secondsRemaining()} | timePassed: ${timePassedInSeconds()}")
+        if (actualSecRemaining < 0) {
+            Log.d("healthapp", "actual: ${abs(actualSecRemaining)} | toSeconds: ${toSeconds(startingTime)} | %: ${actualSecRemaining % toSeconds(startingTime)}")
+            var numTimersConsumed : Int = abs(actualSecRemaining) / toSeconds(startingTime)
+            actualSecRemaining = abs(actualSecRemaining) % toSeconds(startingTime)
+
+            checkpointCallback?.let{ it("$numTimersConsumed") }
+        }
+
+
         hours = actualSecRemaining / 60 / 60
         actualSecRemaining -= hours * 60 * 60
         minutes = actualSecRemaining / 60
@@ -56,8 +67,9 @@ class CountdownTimer(private val startingTime : String) {
                 hours -= 1
             }
             if ((hours + minutes + seconds) == 0) {
-                checkpointCallback?.let { it("00:00:00") }
+                Log.d("healthapp", "fd;lskaj")
                 handler.removeCallbacks(this)
+                checkpointCallback?.let { it("00:00:00") }
             }
 
             timerTextView.text = timeRemainingToString()
@@ -97,6 +109,7 @@ class CountdownTimer(private val startingTime : String) {
         this.timerTextView = timerTextView
         this.timerTextView.text = timeRemainingToString()
         handler.postDelayed(countDownOneSec, 1000)
+        checkpointCallback?.let{ it(timeRemainingToString()) }
     }
 
     public fun restart() {
@@ -115,7 +128,7 @@ class CountdownTimer(private val startingTime : String) {
         start(timerTextView)
     }
 
-    public fun stop() {
+    private fun stop() {
         handler.removeCallbacks(countDownOneSec)
     }
 
@@ -132,6 +145,13 @@ class CountdownTimer(private val startingTime : String) {
     }
 
     private fun toSeconds(hours: Int, minutes: Int, seconds: Int): Int {
+        return (hours * 60 * 60) + (minutes * 60) + seconds
+    }
+
+    private fun toSeconds(time: String): Int {
+        val hours : Int = startingTime.split(":")[0].toInt()
+        val minutes : Int = startingTime.split(":")[1].toInt()
+        val seconds : Int = startingTime.split(":")[2].toInt()
         return (hours * 60 * 60) + (minutes * 60) + seconds
     }
 }

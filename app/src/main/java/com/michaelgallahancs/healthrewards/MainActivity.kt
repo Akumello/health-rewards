@@ -23,8 +23,8 @@ import java.time.LocalDateTime
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore("settings")
 
-    private val startingTime : String = "36:00:02"
-    private val timerCheckPoints : Array<String> = arrayOf(startingTime, "36:00:00", "24:00:00")
+    private val startingTime : String = "00:00:07"
+    private val timerCheckPoints : Array<String> = arrayOf(startingTime, "00:00:05", "00:00:03")//arrayOf(startingTime, "36:00:00", "24:00:00")
 
     private lateinit var btnSubMiles : Button
     private lateinit var addButton: Button
@@ -71,11 +71,11 @@ class MainActivity : ComponentActivity() {
 
             val timerCreateTime = getTimerDateFromDataStore()
             timer = if(timerCreateTime != "")
-                CountdownTimer(startingTime, LocalDateTime.parse(timerCreateTime))
+                CountdownTimer(startingTime, LocalDateTime.parse(timerCreateTime), timerCheckpointCallback)
             else
-                CountdownTimer(startingTime)
+                CountdownTimer(startingTime, timerCheckpointCallback)
 
-            timer.setCheckpoints(timerCheckPointCallback, *timerCheckPoints)
+            timer.setCheckpoints(timerCheckpointCallback, *timerCheckPoints)
             timer.start(tvCountdown)
         }
     }
@@ -87,19 +87,32 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private val timerCheckPointCallback : (String) -> Unit = {
+    private val timerCheckpointCallback : (String) -> Unit = {
         // Alpha: 30
         // Green:  #6B4CAF42 76 175 80
         // Yellow: #4DFFEB3B 255 235 59
         // Red-Or: #4DF44336 244 67 54
-//        Log.d("healthapp", "callback has been executed: $it")
-        timerCheckPoints.forEachIndexed { i, checkpoint ->
-            if (it == checkpoint && i == 0) // First checkpoint
-                tvCountdown.setBackgroundColor(0x6B4CAF42)
-            if (it == checkpoint && i == 1) // Second checkpoint
-                tvCountdown.setBackgroundColor(0x4DFFEB3B)
-            if (it == checkpoint && i == 2) // Second checkpoint
-                tvCountdown.setBackgroundColor(0x4DF44336)
+        Log.d("healthapp", "callback has been executed: $it | match: ${it.matches("[0-9]+".toRegex())}")
+        val tokenTotal = tvTokenCount.text.toString().toInt()
+
+        if (it.matches("[0-9]+".toRegex())) {
+            if (it.toString().toInt() <= tokenTotal)
+                tvTokenCount.text = "${tokenTotal - it.toString().toInt()}"
+            else
+                tvTokenCount.text = "${0}"
+        }
+
+        if (it == timerCheckPoints[0])
+            tvCountdown.setBackgroundColor(0x6B4CAF42)
+        if (it == timerCheckPoints[1])
+            tvCountdown.setBackgroundColor(0x4DFFEB3B)
+        if (it == timerCheckPoints[2])
+            tvCountdown.setBackgroundColor(0x4DF44336)
+        if (it == "00:00:00") {
+            if (tokenTotal > 0)
+                tvTokenCount.text = "${tokenTotal - 1}"
+            
+            timer.restart()
         }
     }
 
@@ -166,7 +179,6 @@ class MainActivity : ComponentActivity() {
             tokenEarned = true
             result = 0
             timer.restart()
-            tvCountdown.setBackgroundColor(0x6B4CAF42)
         }
 
         milesCounterText.text = "$result"
