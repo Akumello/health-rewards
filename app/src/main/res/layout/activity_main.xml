@@ -142,7 +142,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="120dp"
             android:autoText="false"
-            android:text="How it works:\n\n&#8226; Achieve 10 mile goal to earn a token\n\n&#8226; Spend tokens on rewards!\n\n&#8226; Lose one token when the countdown timer reaches zero\n\n&#8226; Reset the timer by earning a token!"
+            android:text="How it works:\n\n&#8226; Reach the 10 mile goal to earn a token\n\n&#8226; Spend tokens on rewards\n\n&#8226; Lose one token when the countdown timer ends\n\n&#8226; Reset the timer by earning a token"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -23,14 +23,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-//TODO: Save and restore clickable states
-//      Set to clickable again on start of next day
-
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore("settings")
 
     private val startingTime : String = "48:00:00"
-    private val timerCheckPoints : Array<String> = arrayOf(startingTime, "36:00:00", "24:00:00")
+    private val timerCheckPoints : Array<String> = arrayOf(startingTime, "24:00:00", "12:00:00")
     private val hourOfNewDay : Int = 4 // e.g. 4 for 4am or 20 for 8pm
 
     private lateinit var btnSubMiles : Button
@@ -72,10 +69,7 @@ class MainActivity : ComponentActivity() {
         cbDrinks = findViewById<CheckBox>(R.id.cbDrinks)
         cbSweets = findViewById<CheckBox>(R.id.cbSweets)
         tvCost = findViewById<TextView>(R.id.tvCost)
-    }
 
-    override fun onStart() {
-        super.onStart()
 
         // ##### Restore data from datastore #####
         lifecycleScope.launch() {
