@@ -34,23 +34,19 @@ class CountdownTimer(private val startingTime : String, private var checkpointCa
     constructor(startingTime: String, createdDateTime: LocalDateTime, checkpointCallback: ((checkpoint : String) -> Unit)? = null) : this(startingTime, checkpointCallback) {
         this.createdDateTime = createdDateTime
 
-
-        var actualSecRemaining = secondsRemaining() - timePassedInSeconds()
-        Log.d("healthapp", "actual: $actualSecRemaining | secondsRemaining: ${secondsRemaining()} | timePassed: ${timePassedInSeconds()}")
-        if (actualSecRemaining < 0) {
-            Log.d("healthapp", "actual: ${abs(actualSecRemaining)} | toSeconds: ${toSeconds(startingTime)} | %: ${actualSecRemaining % toSeconds(startingTime)}")
-            var numTimersConsumed : Int = abs(actualSecRemaining) / toSeconds(startingTime)
-            actualSecRemaining = abs(actualSecRemaining) % toSeconds(startingTime)
+        var secondsRemaining = toSeconds(startingTime) - timePassed()
+        if (secondsRemaining < 0) {
+            var numTimersConsumed : Int = abs(secondsRemaining / toSeconds(startingTime))
+            secondsRemaining = abs(secondsRemaining % toSeconds(startingTime))
 
             checkpointCallback?.let{ it("$numTimersConsumed") }
         }
 
-
-        hours = actualSecRemaining / 60 / 60
-        actualSecRemaining -= hours * 60 * 60
-        minutes = actualSecRemaining / 60
-        actualSecRemaining -= minutes * 60
-        seconds = actualSecRemaining
+        hours = secondsRemaining / 60 / 60
+        secondsRemaining -= hours * 60 * 60
+        minutes = secondsRemaining / 60
+        secondsRemaining -= minutes * 60
+        seconds = secondsRemaining
     }
 
     private val countDownOneSec : Runnable = object : Runnable {
@@ -67,14 +63,13 @@ class CountdownTimer(private val startingTime : String, private var checkpointCa
                 hours -= 1
             }
             if ((hours + minutes + seconds) == 0) {
-                Log.d("healthapp", "fd;lskaj")
                 handler.removeCallbacks(this)
                 checkpointCallback?.let { it("00:00:00") }
             }
 
-            timerTextView.text = timeRemainingToString()
+            timerTextView.text = timeRemainingString()
 
-
+            // Call checkpoint call back when reached
             checkpoints?.forEach { checkpoint ->
                 var checkpointReached : Boolean =   checkpoint.hours == hours
                                                     && checkpoint.minutes == minutes
@@ -86,16 +81,19 @@ class CountdownTimer(private val startingTime : String, private var checkpointCa
         }
     }
 
-    public fun setCheckpoints(callback: (String) -> Unit, vararg checkpoints: String) {
-        checkpointCallback = callback
+    public fun setCheckpoints(vararg checkpoints: String) {
         this.checkpoints = Array(checkpoints.size) { Checkpoint(0,0,0) }
         checkpoints.forEachIndexed{ i, checkpoint ->
-            this.checkpoints!![i].hours = checkpoint.split(":")[0].toInt()
-            this.checkpoints!![i].minutes = checkpoint.split(":")[1].toInt()
-            this.checkpoints!![i].seconds = checkpoint.split(":")[2].toInt()
+            val checkpointHours : Int = checkpoint.split(":")[0].toInt()
+            val checkpointMinutes : Int = checkpoint.split(":")[1].toInt()
+            val checkpointSeconds : Int = checkpoint.split(":")[2].toInt()
 
-            Log.d("healthapp", "${template.format(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds)}")
-            if(secondsRemaining() <= toSeconds(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds))
+            this.checkpoints!![i].hours = checkpointHours
+            this.checkpoints!![i].minutes = checkpointMinutes
+            this.checkpoints!![i].seconds = checkpointSeconds
+
+            // Fire each checkpoint that has been passed already
+            if(timeRemaining() <= toSeconds(checkpointHours, checkpointMinutes, checkpointSeconds))
                 checkpointCallback?.let{ it( template.format(this.checkpoints!![i].hours, this.checkpoints!![i].minutes, this.checkpoints!![i].seconds)) }
         }
     }
@@ -104,12 +102,11 @@ class CountdownTimer(private val startingTime : String, private var checkpointCa
         return createdDateTime
     }
 
-
     public fun start(timerTextView : TextView) {
         this.timerTextView = timerTextView
-        this.timerTextView.text = timeRemainingToString()
+        this.timerTextView.text = timeRemainingString()
         handler.postDelayed(countDownOneSec, 1000)
-        checkpointCallback?.let{ it(timeRemainingToString()) }
+        checkpointCallback?.let{ it(timeRemainingString()) }
     }
 
     public fun restart() {
@@ -132,15 +129,15 @@ class CountdownTimer(private val startingTime : String, private var checkpointCa
         handler.removeCallbacks(countDownOneSec)
     }
 
-    private fun timePassedInSeconds() : Int {
+    private fun timePassed() : Int {
         return ChronoUnit.SECONDS.between(createdDateTime, LocalDateTime.now()).toInt()
     }
 
-    public fun timeRemainingToString() : String {
+    public fun timeRemainingString() : String {
         return template.format(hours, minutes, seconds)
     }
 
-    private fun secondsRemaining(): Int {
+    private fun timeRemaining(): Int {
         return (hours * 60 * 60) + (minutes * 60) + seconds
     }
 
