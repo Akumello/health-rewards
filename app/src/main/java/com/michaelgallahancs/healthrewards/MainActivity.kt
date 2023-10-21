@@ -21,11 +21,14 @@ import com.michaelgallahancs.healthrewards.utilities.CountdownTimer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 import java.time.LocalDateTime
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     private val Context.dataStore by preferencesDataStore("settings")
 
+    private val goal : Double = 6.5
     private val startingTime : String = "48:00:00"
     private val timerCheckPoints : Array<String> = arrayOf(startingTime, "24:00:00", "12:00:00")
     private val hourOfNewDay : Int = 4 // e.g. 4 for 4am or 20 for 8pm
@@ -40,6 +43,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var cbDrinks : CheckBox
     private lateinit var cbSweets : CheckBox
     private lateinit var tvCost : TextView
+    private lateinit var tvRules : TextView
 
     // Initialize with time from storage
     private lateinit var timer : CountdownTimer
@@ -69,7 +73,9 @@ class MainActivity : ComponentActivity() {
         cbDrinks = findViewById<CheckBox>(R.id.cbDrinks)
         cbSweets = findViewById<CheckBox>(R.id.cbSweets)
         tvCost = findViewById<TextView>(R.id.tvCost)
+        tvRules = findViewById<TextView>(R.id.tvRules)
 
+        tvRules.text = "How it works:\n\n\u2022 Reach the $goal mile goal to earn a token\n\n\u2022 Spend tokens on rewards\n\n\u2022 Lose one token when the countdown timer ends\n\n\u2022 Reset the timer by earning a token"
 
         // ##### Restore data from datastore #####
         lifecycleScope.launch() {
@@ -79,9 +85,9 @@ class MainActivity : ComponentActivity() {
                 cbDrinks.isClickable = getStringFromDataStore(Keys.DRINKS_STATE).toInt() == 1
                 cbSweets.isClickable = getStringFromDataStore(Keys.SWEETS_STATE).toInt() == 1
 
-                cbFood.alpha = 1 - 0.5f * (!cbFood.isClickable).toInt()
-                cbDrinks.alpha = 1 - 0.5f * (!cbDrinks.isClickable).toInt()
-                cbSweets.alpha = 1 - 0.5f * (!cbSweets.isClickable).toInt()
+                cbFood.alpha = if (cbFood.isClickable) 1.0f else 0.5f
+                cbDrinks.alpha = if (cbDrinks.isClickable) 1.0f else 0.5f
+                cbSweets.alpha = if (cbSweets.isClickable) 1.0f else 0.5f
             }
 
             val miles = getStringFromDataStore(Keys.MILE_COUNT)
@@ -198,17 +204,17 @@ class MainActivity : ComponentActivity() {
     }
 
     fun subtractMiles(view: View) {
-        var result = milesCounterText.text.toString().toInt() - 1
+        var result = milesCounterText.text.toString().toDouble() - 0.5
         if (result >= 0)
-            milesCounterText.text = ("${(milesCounterText.text.toString().toInt() - 1)}")
+            milesCounterText.text = ("${(milesCounterText.text.toString().toInt() - 0.5)}")
     }
 
     fun addMiles(view: View) {
-        var result = milesCounterText.text.toString().toInt() + 1
+        var result = milesCounterText.text.toString().toDouble() + 0.5
         var tokenEarned = false
-        if (result == 10) {
+        if (result == goal) {
             tokenEarned = true
-            result = 0
+            result = 0.0
             timer.restart()
         }
 
