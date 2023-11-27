@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#6BD8E7EA"
     android:orientation="vertical"
-    android:weightSum="7">
+    android:weightSum="8">
 
     <TextView
         android:id="@+id/tvCountdown"
@@ -20,136 +20,241 @@
         android:textSize="34sp"
         android:textStyle="bold" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4">
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_weight="1"
+            android:justificationMode="none"
+            android:paddingLeft="20dp"
             android:text="Tokens:"
             android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.108"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTokenCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_weight="1"
             android:text="0"
             android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.045"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnSpend"
-            android:layout_width="107dp"
-            android:layout_height="55dp"
-            android:layout_marginBottom="24dp"
-            android:onClick="spendButtonClicked"
-            android:text="Spend"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.821"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <CheckBox
-            android:id="@+id/cbDrinks"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="132dp"
-            android:onClick="drinkChecked"
-            android:text="Drinks"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.727"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cbFood"
-            app:layout_constraintVertical_bias="0.135" />
-
-        <CheckBox
-            android:id="@+id/cbFood"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:onClick="foodChecked"
-            android:text="Food"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.723"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.262" />
-
-        <CheckBox
-            android:id="@+id/cbSweets"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:layout_marginStart="16dp"
-            android:onClick="sweetsChecked"
-            android:text="Sweets"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.741"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cbDrinks"
-            app:layout_constraintVertical_bias="0.066" />
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvCost"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="56dp"
-            android:layout_marginBottom="16dp"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:paddingRight="10dp"
+            android:text="Cents:"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
             android:text="0"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.794" />
+            android:textSize="34sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="116dp"
-            android:text="Cost:"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.762" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <TextView
-            android:id="@+id/tvRules"
-            android:layout_width="190dp"
-            android:layout_height="294dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="120dp"
-            android:autoText="false"
-            android:text="How it works:\n\n&#8226; Reach the 10 mile goal to earn a token\n\n&#8226; Spend tokens on rewards\n\n&#8226; Lose one token when the countdown timer ends\n\n&#8226; Reset the timer by earning a token"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="7">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Switch
+                android:id="@+id/switchFast"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Fasted until 5" />
+
+            <Switch
+                android:id="@+id/switchWater"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:text="Drink Water" />
+
+            <TextView
+                android:id="@+id/tvHabits"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="40dp"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:text="Habits"
+                android:textColor="#007505"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvHabits2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="28dp"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:text="Acheivements"
+                android:textColor="#007505"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchFloss"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:text="Floss" />
+
+            <Switch
+                android:id="@+id/switchCare"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
+                android:text="Skin Care" />
+
+            <Switch
+                android:id="@+id/switchKeto"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="Keto" />
+
+            <TextView
+                android:id="@+id/tvRules"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_weight="1"
+                android:autoText="false"
+                android:text="How it works:\n\n&#8226; Reach the 10 mile goal to earn a token\n\n&#8226; Spend tokens on rewards\n\n&#8226; Lose one token when the countdown timer ends\n\n&#8226; Reset the timer by earning a token"
+                android:textSize="16sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="7">
+
+            <TextView
+                android:id="@+id/tvCostLabel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginEnd="120dp"
+                android:layout_weight="1"
+                android:text="Cost:"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbDrinks"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="132dp"
+                android:layout_weight="1"
+                android:onClick="drinkChecked"
+                android:text="Drinks" />
+
+            <TextView
+                android:id="@+id/tvCost"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginEnd="60dp"
+                android:layout_marginBottom="84dp"
+                android:layout_weight="1"
+                android:text="0"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvHabits4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginStart="248dp"
+                android:layout_marginTop="40dp"
+                android:layout_weight="1"
+                android:fontFamily="monospace"
+                android:text="Store"
+                android:textColor="#007505"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSpend"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginBottom="348dp"
+                android:layout_weight="1"
+                android:onClick="spendButtonClicked"
+                android:text="Spend" />
+
+            <CheckBox
+                android:id="@+id/cbSweets"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:onClick="sweetsChecked"
+                android:text="Sweets" />
+
+            <CheckBox
+                android:id="@+id/cbFood"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+                android:onClick="foodChecked"
+                android:text="Food" />
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="50dp"
+        android:paddingVertical="0dp"
         android:weightSum="5">
 
         <Space
