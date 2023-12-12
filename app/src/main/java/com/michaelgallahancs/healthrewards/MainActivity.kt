@@ -10,10 +10,7 @@ import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -22,12 +19,7 @@ import com.michaelgallahancs.healthrewards.utilities.CountdownTimer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import java.time.LocalDateTime
-import kotlin.math.log
-import kotlin.math.round
-import kotlin.math.roundToInt
-import kotlin.math.truncate
 
 //TODO: Disable spend button when cost is not enough
 // TODO:
@@ -115,53 +107,74 @@ class MainActivity : ComponentActivity() {
 
         // ##### Restore data from datastore #####
         lifecycleScope.launch() {
-//            log("loading... ${getStringFromDataStore(Keys.WATER_STATE)}")
-//            switchWater.isChecked = getStringFromDataStore(Keys.WATER_STATE).toInt() == 1
-//            switchCare.isChecked = getStringFromDataStore(Keys.CARE_STATE).toInt() == 1
-//            switchFloss.isChecked = getStringFromDataStore(Keys.FLOSS_STATE).toInt() == 1
-//            switchKeto.isChecked = getStringFromDataStore(Keys.KETO_STATE).toInt() == 1
-//            switchFast.isChecked = getStringFromDataStore(Keys.FAST_STATE).toInt() == 1
+            val savedFast : String = getStringFromDataStore(Keys.FAST_STATE)
+            val savedWater : String = getStringFromDataStore(Keys.WATER_STATE)
+            val savedCare : String = getStringFromDataStore(Keys.CARE_STATE)
+            val savedKeto : String = getStringFromDataStore(Keys.KETO_STATE)
+            val savedFloss : String = getStringFromDataStore(Keys.FLOSS_STATE)
+            var savedDayLastOpened : String = getStringFromDataStore(Keys.LAST_DAY_OF_YEAR)
+            val savedFood : String = getStringFromDataStore(Keys.FOOD_STATE)
+            val savedDrinks : String = getStringFromDataStore(Keys.DRINKS_STATE)
+            val savedSweets : String = getStringFromDataStore(Keys.SWEETS_STATE)
+            val savedTokenCnt : String = getStringFromDataStore(Keys.TOKEN_COUNT)
+            val savedCentCnt : String = getStringFromDataStore(Keys.CENT_COUNT)
+            val savedMiles : String = getStringFromDataStore(Keys.MILE_COUNT)
+            val savedTimer : String = getStringFromDataStore(Keys.TIMER_CREATED)
 
-//            Log.d("healthapp", "Today: ${LocalDateTime.now().dayOfYear} | Saved: ${getStringFromDataStore(Keys.LAST_DAY_OF_YEAR)}")
+            val waterChecked : Int = if(savedWater != "") savedWater.toInt() else 0
+            val careChecked : Int = if(savedCare != "") savedCare.toInt() else 0
+            val flossChecked : Int = if(savedFloss != "") savedFloss.toInt() else 0
+            val ketoChecked : Int = if(savedKeto != "") savedKeto.toInt() else 0
+            val fastChecked : Int = if(savedFast != "") savedFast.toInt() else 0
+            val foodChecked : Int = if(savedFood != "") savedFood.toInt() else 0
+            val drinksChecked : Int = if(savedDrinks != "") savedDrinks.toInt() else 0
+            val sweetsChecked : Int = if(savedSweets != "") savedSweets.toInt() else 0
+            val tokenCount : Int = if (savedTokenCnt != "") savedTokenCnt.toInt() else 0
+            val milesCount : Double = if (savedMiles != "") savedMiles.toDouble() else 0.0
+            val centCount : Int = if (savedCentCnt != "") savedCentCnt.toInt() else 0
+            val dayLastOpened : Int = if (savedDayLastOpened != "") savedDayLastOpened.toInt() else 0
+
+            milesCounterText.text = milesCount.toString()
+            tvTokenCount.text = tokenCount.toString()
+            tvCentCount.text = centCount.toString()
+            btnSubMiles.isEnabled = (milesCount > 0.0) // Subtract inactive when 0
+            switchWater.isChecked = waterChecked == 1
+            switchCare.isChecked = careChecked == 1
+            switchFloss.isChecked = flossChecked == 1
+            switchKeto.isChecked = ketoChecked == 1
+            switchFast.isChecked = fastChecked == 1
+
             // TODO modify date comparison to work an the hour of the users choosing
-//            if (LocalDateTime.now().dayOfYear == getStringFromDataStore(Keys.LAST_DAY_OF_YEAR).toInt()) {
-//                cbFood.isClickable = getStringFromDataStore(Keys.FOOD_STATE).toInt() == 1
-//                cbDrinks.isClickable = getStringFromDataStore(Keys.DRINKS_STATE).toInt() == 1
-//                cbSweets.isClickable = getStringFromDataStore(Keys.SWEETS_STATE).toInt() == 1
-//
-//                cbFood.alpha = if (cbFood.isClickable) 1.0f else 0.5f
-//                cbDrinks.alpha = if (cbDrinks.isClickable) 1.0f else 0.5f
-//                cbSweets.alpha = if (cbSweets.isClickable) 1.0f else 0.5f
-//
-//                setCost()
-//            } else {
-//                addCents()
-//                switchFast.isActivated = false
-//                switchCare.isActivated = false
-//                switchFloss.isActivated = false
-//                switchKeto.isActivated = false
-//                switchWater.isActivated = false
-//            }
+            if (LocalDateTime.now().dayOfYear == dayLastOpened) {
+                cbFood.isClickable = foodChecked == 1
+                cbDrinks.isClickable = drinksChecked == 1
+                cbSweets.isClickable = sweetsChecked == 1
 
-            val miles = getStringFromDataStore(Keys.MILE_COUNT)
-            milesCounterText.text = if (miles != "") miles else "0"
-            if (miles.toDouble() == 0.0)
-//                btnSubMiles.isEnabled = false
-//
-//            val tokens = getStringFromDataStore(Keys.TOKEN_COUNT)
-//            tvTokenCount.text = if (tokens != "") tokens else "0"
-//
-////            val cents = getStringFromDataStore(Keys.CENT_COUNT)
-////            tvCentCount.text = if (cents != "") cents else "0"
-//
-//            val timerCreateTime = getStringFromDataStore(Keys.TIMER_CREATED)
-//            timer = if(timerCreateTime != "")
-//                CountdownTimer(startingTime, LocalDateTime.parse(timerCreateTime), timerCheckpointCallback)
-//            else
-//                CountdownTimer(startingTime, timerCheckpointCallback)
-//
-//            timer.setCheckpoints(*timerCheckPoints)
-//            timer.start(tvCountdown)
+                cbFood.alpha = if (cbFood.isClickable) 1.0f else 0.5f
+                cbDrinks.alpha = if (cbDrinks.isClickable) 1.0f else 0.5f
+                cbSweets.alpha = if (cbSweets.isClickable) 1.0f else 0.5f
+
+                setCost()
+            } else {
+                addCents()
+                switchFast.isActivated = false
+                switchCare.isActivated = false
+                switchFloss.isActivated = false
+                switchKeto.isActivated = false
+                switchWater.isActivated = false
+            }
+
+            timer = if (savedTimer != "")
+                CountdownTimer(
+                    startingTime,
+                    LocalDateTime.parse(savedTimer),
+                    timerCheckpointCallback
+                )
+            else
+                CountdownTimer(startingTime, timerCheckpointCallback)
+
+            timer.setCheckpoints(*timerCheckPoints)
+            timer.start(tvCountdown)
         }
     }
 

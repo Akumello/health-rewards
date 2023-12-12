@@ -83,28 +83,12 @@
             android:orientation="vertical"
             android:weightSum="7">
 
-            <Switch
-                android:id="@+id/switchFast"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Fasted until 5" />
-
-            <Switch
-                android:id="@+id/switchWater"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="12dp"
-                android:layout_weight="1"
-                android:text="Drink Water" />
-
             <TextView
                 android:id="@+id/tvHabits"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
                 android:layout_weight="1"
                 android:fontFamily="monospace"
                 android:text="Habits"
@@ -112,15 +96,35 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <Switch
+                android:id="@+id/switchFast"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:text="Fasted until 5" />
+
+            <Switch
+                android:id="@+id/switchWater"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="Drink Water" />
+
             <TextView
                 android:id="@+id/tvHabits2"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:fontFamily="monospace"
+                android:gravity="center"
                 android:text="Acheivements"
+                android:textAlignment="textStart"
                 android:textColor="#007505"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -129,8 +133,8 @@
                 android:id="@+id/switchFloss"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
                 android:layout_weight="1"
                 android:text="Floss" />
 
@@ -138,8 +142,8 @@
                 android:id="@+id/switchCare"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="Skin Care" />
 
@@ -147,8 +151,8 @@
                 android:id="@+id/switchKeto"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="Keto" />
 
@@ -169,47 +173,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:weightSum="7">
-
-            <TextView
-                android:id="@+id/tvCostLabel"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="0dp"
-                android:layout_marginEnd="120dp"
-                android:layout_weight="1"
-                android:text="Cost:"
-                android:textSize="16sp" />
-
-            <CheckBox
-                android:id="@+id/cbDrinks"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="0dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="132dp"
-                android:layout_weight="1"
-                android:onClick="drinkChecked"
-                android:text="Drinks" />
-
-            <TextView
-                android:id="@+id/tvCost"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="0dp"
-                android:layout_marginEnd="60dp"
-                android:layout_marginBottom="84dp"
-                android:layout_weight="1"
-                android:text="0"
-                android:textSize="16sp" />
+            android:weightSum="6">
 
             <TextView
                 android:id="@+id/tvHabits4"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_margin="0dp"
-                android:layout_marginStart="248dp"
-                android:layout_marginTop="40dp"
                 android:layout_weight="1"
                 android:fontFamily="monospace"
                 android:text="Store"
@@ -217,34 +186,111 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnSpend"
-                android:layout_width="match_parent"
+            <CheckBox
+                android:id="@+id/cbDrinks"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_margin="0dp"
-                android:layout_marginBottom="348dp"
+                android:layout_marginHorizontal="0dp"
+                android:layout_marginVertical="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
                 android:layout_weight="1"
-                android:onClick="spendButtonClicked"
-                android:text="Spend" />
+                android:onClick="drinkChecked"
+                android:text="Drinks" />
 
             <CheckBox
                 android:id="@+id/cbSweets"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_margin="0dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginHorizontal="0dp"
+                android:layout_marginVertical="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
                 android:layout_weight="1"
                 android:onClick="sweetsChecked"
                 android:text="Sweets" />
 
             <CheckBox
                 android:id="@+id/cbFood"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_margin="0dp"
+                android:layout_marginHorizontal="0dp"
+                android:layout_marginVertical="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
                 android:layout_weight="1"
                 android:onClick="foodChecked"
                 android:text="Food" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginHorizontal="0dp"
+                android:layout_marginVertical="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/tvCostLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_marginEnd="120dp"
+                    android:layout_weight="1"
+                    android:text="Cost:"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_marginEnd="60dp"
+                    android:layout_marginBottom="84dp"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSpend"
+                android:layout_width="127dp"
+                android:layout_height="0dp"
+                android:layout_margin="0dp"
+                android:layout_marginHorizontal="0dp"
+                android:layout_marginVertical="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_weight="1"
+                android:onClick="spendButtonClicked"
+                android:text="Spend" />
         </LinearLayout>
     </LinearLayout>
 
